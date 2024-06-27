@@ -5,7 +5,6 @@ const p = path.join(
   "data",
   "products.json"
 );
-
 module.exports = class Product {
   constructor(t) {
     this.title = t;
