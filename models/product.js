@@ -1,6 +1,5 @@
 const fs = require("fs");
 const path = require("path");
-let products = [];
 const p = path.join(
   path.dirname(process.mainModule.filename),
   "data",
@@ -14,23 +13,34 @@ module.exports = class Product {
 
   save() {
     fs.readFile(p, (err, fileContent) => {
-      const productsData = JSON.parse(fileContent);
-      console.log(this);
-      productsData.push(this);
-      products = productsData;
-    });
-    fs.writeFile(p, JSON.stringify(products), (err) => {
-      console.log(err);
+      let products = [];
+      if (!err && fileContent.length > 0) {
+        try {
+          products = JSON.parse(fileContent);
+        } catch (parseErr) {
+          console.log("Error parsing JSON", parseErr);
+        }
+      }
+      const productData = { title: this.title };
+      products.push(productData);
+      fs.writeFile(p, JSON.stringify(products), (err) => {
+        console.log(err);
+      });
     });
   }
 
-  static fetchAll() {
+  static fetchAll(cb) {
+    console.log("Get Fetch All!!!");
+    cb([]);
     fs.readFile(p, (err, fileContent) => {
-      const productsData = JSON.parse(fileContent);
-      console.log(this);
-      productsData.push(this);
-      products = productsData;
+      if (!err && fileContent.length > 0) {
+        try {
+          // cb(JSON.parse(fileContent));
+          console.log(JSON.parse(fileContent));
+        } catch (parseErr) {
+          console.log("Error farsing JSON", parseErr);
+        }
+      }
     });
-    return products;
   }
 };
