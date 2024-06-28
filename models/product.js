@@ -29,16 +29,24 @@ module.exports = class Product {
   }
 
   static fetchAll(cb) {
-    console.log("Get Fetch All!!!");
-    cb([]);
     fs.readFile(p, (err, fileContent) => {
-      if (!err && fileContent.length > 0) {
-        try {
-          // cb(JSON.parse(fileContent));
-          console.log(JSON.parse(fileContent));
-        } catch (parseErr) {
-          console.log("Error farsing JSON", parseErr);
-        }
+      if (err) {
+        // ...
+        console.log("Error reading file", err);
+        return cb([]);
+      }
+      if (fileContent.length === 0) {
+        // ...
+        return cb([]);
+      }
+      try {
+        // ...
+        const products = JSON.parse(fileContent);
+        cb(products);
+      } catch (parseErr) {
+        // ...
+        console.log("Error parsing JSON", parseErr);
+        cb([]);
       }
     });
   }
